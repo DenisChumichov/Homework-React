@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
+import React from "react";
+import Draw from "./Components/Draw";
 import './App.css';
+import { Provider } from 'react-redux'
+import store from './store/store'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    value: ""
+  };
+
+  onClickInput = () => {
+    this.setState({
+      value:
+        "Для сохранения изменений нажмите Enter. Для отмены изменений нажмите Esc."
+    });
+  };
+
+  onEscapePress = () => {
+    this.setState({ value: "" });
+  };
+
+  render() {
+    return (
+      <Provider store={store}>
+        <div className="notifications" id="notifications">
+          {this.state.value}
+        </div>
+        <Draw
+          onClickInput={this.onClickInput}
+          onEscapePress={this.onEscapePress}
+        />
+      </Provider>
+    );
+  }
 }
-
 export default App;

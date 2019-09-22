@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Встановити Node.js",
+    "columnId": "Done"
+  },
+  {
+    "title": "Вивчити Vue/React/Angular",
+    "columnId": "To Do"
+  },
+  {
+    "title": "Купити машину",
+    "columnId": "To Do"
+  },
+  {
+    "title": "Поприбирати",
+    "columnId": "To Do"
+  },
+  {
+    "title": "Реалізувати Canban",
+    "columnId": "In Progress"
+  },
+  {
+    "title": "Зрозуміти Promises",
+    "columnId": "Done"
+  }
+]
