@@ -1,0 +1,6 @@
+.App {
+  float: left;
+  width:300px;
+  display:inline-block;
+  border:1px solid black;
+}

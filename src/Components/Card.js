@@ -1,6 +1,5 @@
 import React from "react";
 import { Draggable } from "react-drag-and-drop";
-import { getData } from '../store/action/cards'
 
 export default class Card extends React.Component {
   state = {
@@ -9,15 +8,11 @@ export default class Card extends React.Component {
     id: null
   };
 
-  static getDerivedStateFromProps({ item }, prevState) {
-    if (prevState.value) {
-      return null;
-    }
-    return { initionalValue: item.title, value: item.title };
-  }
   componentDidMount() {
-    getData();
+    const { item } = this.props;
+    this.setState({ initionalValue: item.title, value: item.title })
   }
+
   onChange = event => {
     this.setState({ value: event.target.value });
   };
@@ -35,7 +30,6 @@ export default class Card extends React.Component {
         value: this.state.initionalValue
       });
       event.target.blur();
-      this.props.onEscapePress();
     }
   };
 

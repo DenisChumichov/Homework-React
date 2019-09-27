@@ -105,16 +105,27 @@ app.post("/api/card", function (req, res) {
 
 app.patch("/api/card/:id", function (req, res) {
   const { id } = req.params;
-  const patch = req.body.title;
+  const patch = req.body.data;
 
   console.log("patch card", id, patch);
-  Card.findById(id, (err, card) => {
-    card.title = patch
-    card.save(function (err, result) {
-      console.log("Карточка обновлена")
-      res.send()
+  if (req.body.flag === "title") {
+    Card.findById(id, (err, card) => {
+      card.title = patch
+      card.save(function (err, result) {
+        console.log("Карточка обновлена")
+        res.send()
+      })
     })
-  })
+  }
+  else if (req.body.flag === "columnId") {
+    Card.findById(id, (err, card) => {
+      card.columnId = patch
+      card.save(function (err, result) {
+        console.log("Карточка обновлена")
+        res.send()
+      })
+    })
+  }
 });
 
 app.listen(8888, function () {

@@ -1,6 +1,6 @@
 const initionalState = {
-    dataColumns: [],
-    dataCards: []
+    columns: [],
+    cards: []
 };
 
 
