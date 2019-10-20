@@ -19,7 +19,7 @@ export default class Card extends React.Component {
 
   onKeyDown = event => {
     if (event.key === "Enter") {
-      this.props.onSave(this.props.item._id, this.state.value)
+      this.props.onSave(this.props.item._id, this.state.value, this.props.item.columnId)
       event.target.blur();
       this.setState({
         value: event.target.value

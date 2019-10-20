@@ -11,6 +11,6 @@ const getCards = () => axios.get('/card')
   })
 const deleteCard = (id) => axios.delete(`/card/${id}`)
 const addCard = (data) => axios.post(`/card`, data)
-const updateCard = (id, data, flag) => axios.patch(`/card/${id}`, data, flag)
+const updateCard = (id, data) => axios.patch(`/card/${id}`, data)
 
 export default { deleteCard, addCard, updateCard, getColumns, getCards }

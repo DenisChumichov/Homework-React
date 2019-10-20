@@ -13,7 +13,7 @@ class Draw extends React.Component {
   };
 
   componentDidMount() {
-    getData();
+    this.props.getData();
   }
 
   sortCards = itemCol => {
@@ -32,11 +32,11 @@ class Draw extends React.Component {
       alert("введите коректное значение");
       return false;
     }
-    addCard({ columnId, title })
+    this.props.addCard({ columnId, title })
   };
 
   deleteCard = cardId => {
-    deleteCard(cardId)
+    this.props.deleteCard(cardId)
   };
 
   changeContent = event => {
@@ -59,14 +59,13 @@ class Draw extends React.Component {
     const columnId = target._id
     this.props.cards.map(item => {
       if (item._id === cardId) {
-        const data = columnId
-        updateCard(cardId, { data: data, flag: "columnId" })
+        this.props.updateCard(cardId, { columnId: columnId, title: item.title })
       }
     })
   };
 
-  onCardSave = (id, data) => {
-    updateCard(id, { data: data, flag: "title" })
+  onCardSave = (id, data, columnId) => {
+    this.props.updateCard(id, { columnId: columnId, title: data })
   };
 
   onClickInput = () => {
@@ -119,4 +118,13 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Draw)
+function mapDispatchToProps(dispatch) {
+  return ({
+    getData: () => { dispatch(getData()) },
+    addCard: (data) => { addCard(data)(dispatch) },
+    deleteCard: (data) => { deleteCard(data)(dispatch) },
+    updateCard: (id, { columnId, title }) => { updateCard(id, { columnId, title })(dispatch) }
+  })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Draw)

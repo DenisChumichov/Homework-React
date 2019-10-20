@@ -1,42 +1,35 @@
-import store from '../store'
 import api from '../../repository'
+import type from '../types'
 
 export const getData = () => {
-    return Promise.all([api.getColumns(), api.getCards()])
-        .then(([columns, cards]) => {
-            return store.dispatch({
-                type: "GET_CARDS",
-                payload: {
-                    columns: columns,
-                    cards: cards
-                }
-            })
-        })
+    return {
+        type: type.getCards
+    }
 }
 
-export const addCard = (data) => {
+export const addCard = (data) => (dispatch) => {
     return api.addCard(data)
         .then(() => {
-            return store.dispatch({
-                type: "ADD_CARD"
+            return dispatch({
+                type: type.addCard
             })
         })
 }
 
-export const deleteCard = (data) => {
+export const deleteCard = (data) => (dispatch) => {
     return api.deleteCard(data)
         .then(() => {
-            return store.dispatch({
-                type: "DELETE_CARD"
+            return dispatch({
+                type: type.deleteCard
             })
         })
 }
 
-export const updateCard = (id, { data, flag }) => {
-    return api.updateCard(id, { data, flag })
+export const updateCard = (id, { columnId, title }) => (dispatch) => {
+    return api.updateCard(id, { columnId, title })
         .then(() => {
-            return store.dispatch({
-                type: "UPDATE_CARD"
+            return dispatch({
+                type: type.updateCard
             })
         })
 }
