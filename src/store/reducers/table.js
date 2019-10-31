@@ -1,18 +1,18 @@
+import type from '../types'
+
 const initionalState = {
-    dataColumns: [],
-    dataCards: []
+    columns: [],
+    cards: []
 };
 
 
 export default function cards(state = initionalState, action) {
     switch (action.type) {
-        case 'GET_CARDS':
+        case type.successGetCard:
             return {
                 ...state,
                 ...action.payload
             }
         default: return state
     }
-
-
 }

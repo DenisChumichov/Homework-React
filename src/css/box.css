@@ -1,0 +1,17 @@
+.box{
+    white-space:nowrap
+}
+  
+.box div{
+    float: left; 
+    width:250px;
+    display:inline-block;
+    border:1px solid black;
+}
+
+.box button{
+    float: right;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+}

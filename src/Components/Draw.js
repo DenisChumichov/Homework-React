@@ -1,24 +1,24 @@
 import React from "react";
 import Card from "./Card";
-import api from '../repository'
 import { Droppable } from "react-drag-and-drop";
-import { getData } from '../store/action/cards'
+import { getData, addCard, deleteCard, updateCard } from '../store/action/cards'
 import { connect } from 'react-redux';
 
 class Draw extends React.Component {
   state = {
-    dataColumns: [],
-    dataCards: [],
-    value: ""
+    columns: [],
+    cards: [],
+    value: "",
+    isFocused: false
   };
 
   componentDidMount() {
-    getData();
+    this.props.getData();
   }
 
   sortCards = itemCol => {
     let arr = [];
-    this.props.dataCards.map(item => {
+    this.props.cards.map(item => {
       if (item.columnId === itemCol._id) {
         arr.push(item);
       }
@@ -32,17 +32,11 @@ class Draw extends React.Component {
       alert("введите коректное значение");
       return false;
     }
-    api.addCard({ columnId, title })
-      .then(() => {
-        getData();
-      });
+    this.props.addCard({ columnId, title })
   };
 
   deleteCard = cardId => {
-    api.deleteCard(cardId)
-      .then(() => {
-        getData();
-      });
+    this.props.deleteCard(cardId)
   };
 
   changeContent = event => {
@@ -63,34 +57,35 @@ class Draw extends React.Component {
   onDrop = (data, target) => {
     const cardId = data.data;
     const columnId = target._id
-    this.props.dataCards.map(item => {
+    this.props.cards.map(item => {
       if (item._id === cardId) {
-        const title = item.title
-        api.deleteCard(cardId)
-        api.addCard({ columnId, title })
-          .then(() => {
-            getData();
-          });
+        this.props.updateCard(cardId, { columnId: columnId, title: item.title })
       }
     })
   };
 
-  onCardSave = (id, title) => {
-    api.updateCard(id, { title })
-      .then(() => {
-        api.getData().then(([columns, cards]) => {
-          this.setState({
-            dataCards: cards
-          })
-        })
-      });
+  onCardSave = (id, data, columnId) => {
+    this.props.updateCard(id, { columnId: columnId, title: data })
+  };
+
+  onClickInput = () => {
+    this.setState({
+      isFocused: true
+    });
+  };
+
+  onEscapePress = () => {
+    this.setState({ isFocused: false });
   };
 
   render() {
     return (
       <>
+        <div className="notifications" id="notifications">
+          {this.state.isFocused && "Для сохранения изменений нажмите Enter. Для отмены изменений нажмите Esc."}
+        </div>
         <div className="box">
-          {this.props.dataColumns.map(itemCol => (
+          {this.props.columns.map(itemCol => (
             <Droppable
               types={["data"]}
               onDrop={data => this.onDrop(data, itemCol)}
@@ -98,17 +93,15 @@ class Draw extends React.Component {
               <div id={itemCol.id}>
                 {itemCol.title}
                 <button onClick={() => this.addCard(itemCol._id)}>+</button>
-                {
-                  this.sortCards(itemCol).map(item => (
-                    < Card
-                      item={item}
-                      onClickInput={this.props.onClickInput}
-                      onEscapePress={this.props.onEscapePress}
-                      deleteCard={this.deleteCard}
-                      dataCards={this.props.dataCards}
-                      onSave={this.onCardSave}
-                    />
-                  ))}
+                {this.sortCards(itemCol).map(item => (
+                  < Card
+                    item={item}
+                    onClickInput={this.onClickInput}
+                    onEscapePress={this.onEscapePress}
+                    deleteCard={this.deleteCard}
+                    onSave={this.onCardSave}
+                  />
+                ))}
               </div>
             </Droppable>
           ))}
@@ -120,9 +113,18 @@ class Draw extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    dataColumns: state.cards.dataColumns,
-    dataCards: state.cards.dataCards
+    columns: state.cards.columns,
+    cards: state.cards.cards
   }
 }
 
-export default connect(mapStateToProps)(Draw)
+function mapDispatchToProps(dispatch) {
+  return ({
+    getData: () => { dispatch(getData()) },
+    addCard: (data) => { addCard(data)(dispatch) },
+    deleteCard: (data) => { deleteCard(data)(dispatch) },
+    updateCard: (id, { columnId, title }) => { updateCard(id, { columnId, title })(dispatch) }
+  })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Draw)
